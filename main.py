@@ -7,7 +7,13 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
 
-async def prepare_lesson_review(lesson_review_data):
+async def prepare_lesson_review(lesson_review_data: dict) -> dict:
+    '''Prepare JSON for result dict
+    params:
+        lesson_review_data: dict with result
+    return:
+        result dict for prepare to massege
+    '''
     lesson_review = {
         "submitted_at":  lesson_review_data["new_attempts"][0]["submitted_at"],
         "check_status": lesson_review_data["new_attempts"][0]["is_negative"],
@@ -17,14 +23,26 @@ async def prepare_lesson_review(lesson_review_data):
     return lesson_review
 
 
-async def take_lesson_review_data(url_long, headers, params):
+async def take_lesson_review_data(
+    url_long: str,
+    headers: dict,
+    params: dict
+    ) -> dict:
+    '''Make a Api reuest
+    params:
+        url_long: url
+        headers: dict autorisation token
+        params: dict timestampt
+    return:
+        json
+    '''
     response = requests.get(url_long, headers=headers,  params=params, timeout=30)
     response = response.json()
     params["timestamp"] = response["last_attempt_timestamp"]
     return response
 
 
-async def main():
+async def main() -> None:
     tg_token = os.environ["TG_TOKEN"]
     chat_id = os.environ["CHAT_ID"]
     dvmn_token = os.environ["DVMN_TOKEN"]
@@ -35,7 +53,11 @@ async def main():
     max_connect_try = 5
     while True:
         try:
-            lesson_review_data = await take_lesson_review_data(url_long, headers, params)
+            lesson_review_data = await take_lesson_review_data(
+                url_long,
+                headers,
+                params
+                )
         except requests.exceptions.Timeout:
             print("Timeout occurred")
             continue
