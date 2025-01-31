@@ -2,14 +2,14 @@ import telegram
 
 
 async def preparing_message(lesson_review):
-    if lesson_review["check_status"]:
-        result = "Преподавателю понравилось, можно приступать к следующему уроку"
-    else:
-        result = "К сожалению в работе нашлись ошибки"
+    result = (
+        "К сожалению в работе нашлись ошибки",
+        "Преподавателю понравилось, можно приступать к следующему уроку"
+    )[lesson_review["check_status"]]
     massage = (
         f'У Вас проверили работу!\n\n'
         f'Урок: "{lesson_review["lesson_title"]}"\n'
-        f'Ссылка на урок: {lesson_review["lesson_url"]}\n'
+        f'Ссылка на урок: {lesson_review["lesson_url"]}\n\n'
         f'Результат проверки: {result}'
     )
     return massage
