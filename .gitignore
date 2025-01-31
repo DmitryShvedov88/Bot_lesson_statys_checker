@@ -1,0 +1,8 @@
+.env
+.mypy_cache
+.pyvenv.cfg
+.idea
+__pycache__
+.vscode
+.DS_Store
+venv
