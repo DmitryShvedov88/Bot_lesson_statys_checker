@@ -3,8 +3,6 @@ import asyncio
 import time
 import requests
 from bot import send_message
-from dotenv import load_dotenv, find_dotenv
-load_dotenv(find_dotenv())
 
 
 async def prepare_lesson_review(lesson_review_data: dict) -> dict:
@@ -43,6 +41,8 @@ async def take_lesson_review_data(
 
 
 async def main() -> None:
+    from dotenv import load_dotenv, find_dotenv
+    load_dotenv(find_dotenv())
     tg_token = os.environ["TG_TOKEN"]
     chat_id = os.environ["CHAT_ID"]
     dvmn_token = os.environ["DVMN_TOKEN"]
