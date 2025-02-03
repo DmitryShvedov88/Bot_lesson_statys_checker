@@ -5,22 +5,6 @@ import requests
 from bot import send_message
 
 
-async def prepare_lesson_review(lesson_review_data: dict) -> dict:
-    '''Prepare JSON for result dict
-    params:
-        lesson_review_data: dict with result
-    return:
-        result dict for prepare to massege
-    '''
-    lesson_review = {
-        "submitted_at":  lesson_review_data["new_attempts"][0]["submitted_at"],
-        "check_status": lesson_review_data["new_attempts"][0]["is_negative"],
-        "lesson_title":  lesson_review_data["new_attempts"][0]["lesson_title"],
-        "lesson_url": lesson_review_data["new_attempts"][0]["lesson_url"]
-        }
-    return lesson_review
-
-
 async def take_lesson_review_data(
     url_long: str,
     headers: dict,
@@ -70,8 +54,7 @@ async def main() -> None:
             connect_try += 1
             continue
         connect_try = 1
-        lesson_review = await prepare_lesson_review(lesson_review_data)
-        await send_message(tg_token, chat_id, lesson_review)
+        await send_message(tg_token, chat_id, lesson_review_data)
 
 
 if __name__ == "__main__":
