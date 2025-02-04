@@ -5,6 +5,7 @@ import requests
 from bot import send_message
 from time import sleep
 
+
 async def take_lesson_review_data(
     url_long: str,
     headers: dict,
