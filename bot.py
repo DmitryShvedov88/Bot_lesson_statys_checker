@@ -4,7 +4,7 @@ import telegram
 async def preparing_message(lesson_review_data: dict) -> str:
     '''Prepare result dict for send by telegram bot
     params:
-        lesson_review: dict with result
+        lesson_review_data: dict with data
     return:
         text massage for telegram bot
     '''
