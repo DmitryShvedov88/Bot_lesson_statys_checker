@@ -20,7 +20,6 @@ async def take_lesson_review_data(
     '''
     async with aiohttp.ClientSession() as session:
         async with session.get(url_long, headers=headers, params=params) as response:
-            # response = requests.get(url_long, headers=headers, params=params, timeout=30)
             response.raise_for_status()
             response = await response.json()
             params["timestamp"] = response["last_attempt_timestamp"]
