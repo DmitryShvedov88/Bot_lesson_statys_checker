@@ -1,6 +1,5 @@
 import os
 import asyncio
-import time
 import requests
 from bot import send_message
 
@@ -19,6 +18,7 @@ async def take_lesson_review_data(
         json
     '''
     response = requests.get(url_long, headers=headers,  params=params, timeout=30)
+    response.raise_for_status()
     response = response.json()
     params["timestamp"] = response["last_attempt_timestamp"]
     return response
