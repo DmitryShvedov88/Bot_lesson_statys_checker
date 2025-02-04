@@ -6,7 +6,7 @@ A small telegram bot that sends you the results of checking your lessons.
 ```git clone https://github.com/DmitryShvedov88/Bot_lesson_statys_checker.git```
 
 #### Environment variables:
-- You should have:
+You should have:
 1. DVMN_TOKEN - token for authorization on the Devman site  
 2. TG_TOKEN - Token for TG Bot
 3. CHAT_ID - ID chat where you want to write
