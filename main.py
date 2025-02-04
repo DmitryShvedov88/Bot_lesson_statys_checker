@@ -2,7 +2,7 @@ import os
 import asyncio
 import requests
 from bot import send_message
-
+from time import sleep
 
 async def take_lesson_review_data(
     url_long: str,
@@ -41,9 +41,12 @@ async def main() -> None:
                 headers,
                 params
                 )
+            await send_message(tg_token, chat_id, lesson_review_data)
+        except requests.exceptions.ReadTimeout:
+            continue
         except requests.exceptions.ConnectionError:
             print("ConnectionError occurred")
-        await send_message(tg_token, chat_id, lesson_review_data)
+            sleep(60)
 
 
 if __name__ == "__main__":
