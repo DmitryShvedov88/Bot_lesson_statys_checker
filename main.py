@@ -1,9 +1,10 @@
 import os
-import aiohttp
-import asyncio
-import requests
-from bot import send_message
 from time import sleep
+import asyncio
+import aiohttp
+import requests
+from dotenv import load_dotenv, find_dotenv
+from bot import send_message
 
 
 async def take_lesson_review_data(
@@ -28,7 +29,6 @@ async def take_lesson_review_data(
 
 
 async def main() -> None:
-    from dotenv import load_dotenv, find_dotenv
     load_dotenv(find_dotenv())
     tg_token = os.environ["TG_TOKEN"]
     chat_id = os.environ["CHAT_ID"]
