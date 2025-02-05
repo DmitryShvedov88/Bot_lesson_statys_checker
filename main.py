@@ -35,9 +35,8 @@ async def main() -> None:
     dvmn_token = os.environ["DVMN_TOKEN"]
     url_long = 'https://dvmn.org/api/long_polling/'
     headers = {"Authorization": f'Token {dvmn_token}'}
-    timestamp = str()
     while True:
-        params = {"timestamp": timestamp}
+        params = {"timestamp": str()}
         try:
             lesson_review_data = await take_lesson_review_data(
                 url_long,
