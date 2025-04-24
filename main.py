@@ -1,4 +1,5 @@
 import os
+import logging
 from time import sleep
 import asyncio
 import aiohttp
@@ -7,6 +8,25 @@ from dotenv import load_dotenv, find_dotenv
 from bot import send_message
 
 
+logger = logging.getLogger('Logger')
+logger.setLevel(logging.INFO)
+
+logging.debug('Сообщение для дебагинга')
+logging.info('Произошло какое-то событие. Всё идёт по плану.')
+logging.warning('Предупреждение, что-то могло сломаться')
+logging.error('Ошибка, что-то сломалось')
+logging.critical('МЫ В ОГНЕ ЧТО ДЕЛАТЬ?!?!')
+
+
+
+logging.basicConfig(level=logging.DEBUG)
+logging.debug('Сообщение уровня DEBUG')
+logging.basicConfig(format="%(process)d %(levelname)s %(message)s")
+logging.warning("This is a Warning")
+
+class TelegramLogsHandler(logging.Handler):
+    Logging.handlers
+    
 async def take_lesson_review_data(
     url_long: str,
     headers: dict,
