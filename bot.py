@@ -25,7 +25,7 @@ async def send_message(
     tg_token: str,
     chat_id: str,
     lesson_review_data: dict
-    ) -> None:
+) -> None:
     '''Sand a massage to TG_Chat
     params:
         tg_token: telegram_bot token

@@ -1,18 +1,11 @@
 import os
-import logging
 from time import sleep
 import asyncio
 import aiohttp
 import requests
 from dotenv import load_dotenv, find_dotenv
 from bot import send_message
-
-
-FORMAT = "%(asctime)s %(process)d %(levelname)s %(message)s"
-
-logging.basicConfig(format=FORMAT)
-logger = logging.getLogger('Logger')
-logger.setLevel(logging.INFO)
+from tg_logging import logger_setting, exception_log, main_logger
 
 
 async def take_lesson_review_data(
@@ -38,14 +31,15 @@ async def take_lesson_review_data(
 
 
 async def main() -> None:
-    logger.info("Программа стартует")
+    main_logger.info("Программа стартует")
     load_dotenv(find_dotenv())
     tg_token = os.environ["TG_TOKEN"]
+    bot_logger_token = os.environ["TG_BOT_LOGGER_TOKEN"]
     chat_id = os.environ["CHAT_ID"]
     dvmn_token = os.environ["DVMN_TOKEN"]
     url_long = 'https://dvmn.org/api/long_polling/'
     headers = {"Authorization": f'Token {dvmn_token}'}
-    logger.info("Программа загрузила переменные")
+    main_logger.info("Программа готова")
     while True:
         params = {"timestamp": str()}
         try:
@@ -56,14 +50,27 @@ async def main() -> None:
                 )
             params["timestamp"] = lesson_review_data["last_attempt_timestamp"]
             await send_message(tg_token, chat_id, lesson_review_data)
-        except requests.exceptions.ReadTimeout:
-            logging.info('ReadTimeout')
+        except requests.exceptions.ReadTimeout as e:
+            logger_setting(bot_logger_token, chat_id)
+            main_logger.info('ReadTimeout')
+            exception_log(
+                'requests.exceptions.ReadTimeout: ', e
+                )
             continue
-        except requests.exceptions.ConnectionError:
-            logging.warning('ConnectionError occurred')
+        except requests.exceptions.ConnectionError as e:
+            logger_setting(bot_logger_token, chat_id)
+            main_logger.warning('ConnectionError occurred')
+            exception_log(
+                'requests.exceptions.ConnectionError: ', e
+                )
+
             sleep(60)
-        except Exception:
-            logger.exception('BotFail')
+        except Exception as e:
+            logger_setting(bot_logger_token, chat_id)
+            main_logger.exception('BotFail')
+            exception_log(
+                'BotFail: ', e
+                )
             sleep(60)
 
 
