@@ -39,6 +39,7 @@ async def main() -> None:
     dvmn_token = os.environ["DVMN_TOKEN"]
     url_long = 'https://dvmn.org/api/long_polling/'
     headers = {"Authorization": f'Token {dvmn_token}'}
+    #logger = logger_setting(bot_logger_token, chat_id)
     main_logger.info("Программа готова")
     while True:
         params = {"timestamp": str()}
@@ -51,14 +52,12 @@ async def main() -> None:
             params["timestamp"] = lesson_review_data["last_attempt_timestamp"]
             await send_message(tg_token, chat_id, lesson_review_data)
         except requests.exceptions.ReadTimeout as e:
-            logger_setting(bot_logger_token, chat_id)
             main_logger.info('ReadTimeout')
             exception_log(
                 'requests.exceptions.ReadTimeout: ', e
                 )
             continue
         except requests.exceptions.ConnectionError as e:
-            logger_setting(bot_logger_token, chat_id)
             main_logger.warning('ConnectionError occurred')
             exception_log(
                 'requests.exceptions.ConnectionError: ', e
@@ -66,7 +65,6 @@ async def main() -> None:
 
             sleep(60)
         except Exception as e:
-            logger_setting(bot_logger_token, chat_id)
             main_logger.exception('BotFail')
             exception_log(
                 'BotFail: ', e
