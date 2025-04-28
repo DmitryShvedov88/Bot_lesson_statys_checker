@@ -10,6 +10,7 @@ You should have:
 1. DVMN_TOKEN - token for authorization on the Devman site  
 2. TG_TOKEN - Token for TG Bot
 3. CHAT_ID - ID chat where you want to write
+4. TG_BOT_LOGGER_TOKEN - ID chat where you want to recive prigram errors
 
 #### How to install  
 1. Python3 should already be installed.  
