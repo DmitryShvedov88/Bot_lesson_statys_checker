@@ -50,20 +50,6 @@ async def main() -> None:
                 )
             params["timestamp"] = lesson_review_data["last_attempt_timestamp"]
             await send_message(tg_token, chat_id, lesson_review_data)
-            x = 5/0
-        except ZeroDivisionError as e:
-            main_logger.info('ReadTimeout')
-            run_error_log(bot_logger_token, chat_id)
-            exception_log(
-                'requests.exceptions.ReadTimeout: ', e
-                )
-        except requests.exceptions.ReadTimeout as e:
-            main_logger.info('ReadTimeout')
-            exception_log(
-                'requests.exceptions.ReadTimeout: ', e
-                )
-            run_error_log(bot_logger_token, chat_id)
-            continue
         except requests.exceptions.ConnectionError as e:
             main_logger.warning('ConnectionError occurred')
             exception_log(
