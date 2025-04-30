@@ -8,7 +8,7 @@ from bot import send_message
 from tg_logging import logger_setting, exception_log, main_logger
 
 
-async def take_lesson_review_data(
+async def take_lesson_review(
     url_long: str,
     headers: dict,
     params: dict
@@ -43,7 +43,7 @@ async def main() -> None:
     while True:
         params = {"timestamp": str()}
         try:
-            lesson_review_data = await take_lesson_review_data(
+            lesson_review_data = await take_lesson_review(
                 url_long,
                 headers,
                 params
