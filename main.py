@@ -5,7 +5,7 @@ import aiohttp
 import requests
 from dotenv import load_dotenv, find_dotenv
 from bot import send_message
-from tg_logging import logger_setting, exception_log, main_logger
+from tg_logging import run_error_log, exception_log, main_logger
 
 
 async def take_lesson_review(
@@ -53,7 +53,7 @@ async def main() -> None:
             x = 5/0
         except ZeroDivisionError as e:
             main_logger.info('ReadTimeout')
-            logger_setting(bot_logger_token, chat_id)
+            run_error_log(bot_logger_token, chat_id)
             exception_log(
                 'requests.exceptions.ReadTimeout: ', e
                 )
@@ -62,21 +62,21 @@ async def main() -> None:
             exception_log(
                 'requests.exceptions.ReadTimeout: ', e
                 )
-            logger_setting(bot_logger_token, chat_id)
+            run_error_log(bot_logger_token, chat_id)
             continue
         except requests.exceptions.ConnectionError as e:
             main_logger.warning('ConnectionError occurred')
             exception_log(
                 'requests.exceptions.ConnectionError: ', e
                 )
-            logger_setting(bot_logger_token, chat_id)
+            run_error_log(bot_logger_token, chat_id)
             sleep(60)
         except Exception as e:
             main_logger.exception('BotFail')
             exception_log(
                 'BotFail: ', e
                 )
-            logger_setting(bot_logger_token, chat_id)
+            run_error_log(bot_logger_token, chat_id)
             sleep(60)
 
 
