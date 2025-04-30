@@ -1,3 +1,4 @@
+import logging
 import os
 from time import sleep
 import asyncio
@@ -52,17 +53,14 @@ async def main() -> None:
             await send_message(tg_token, chat_id, lesson_review_data)
         except requests.exceptions.ConnectionError as e:
             main_logger.warning('ConnectionError occurred')
-            exception_log(
-                'requests.exceptions.ConnectionError: ', e
-                )
-            run_error_log(bot_logger_token, chat_id)
+            logging.error(f'{requests.exceptions.ConnectionError}: {e}', exc_info=True)
             sleep(60)
         except Exception as e:
             main_logger.exception('BotFail')
             exception_log(
                 'BotFail: ', e
                 )
-            run_error_log(bot_logger_token, chat_id)
+            logging.error(f'{Exception}: {e}', exc_info=True)
             sleep(60)
 
 

@@ -1,7 +1,6 @@
 import logging
 import asyncio
 import telegram
-from time import sleep
 
 
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -34,8 +33,3 @@ def run_error_log(bot_logger_token, chat_id):
     telegram_handler.setFormatter(formatter)
     logger.addHandler(telegram_handler)
     return logger
-
-
-def exception_log(text, exception):
-    logging.error(f'{text}: {exception}', exc_info=True)
-    sleep(4)
