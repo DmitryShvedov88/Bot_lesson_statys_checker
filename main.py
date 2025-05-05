@@ -6,7 +6,7 @@ import aiohttp
 import requests
 from dotenv import load_dotenv, find_dotenv
 from bot import send_message
-from tg_logging import run_error_log, exception_log, main_logger
+from tg_logging import main_logger
 
 
 async def take_lesson_review(
@@ -57,9 +57,6 @@ async def main() -> None:
             sleep(60)
         except Exception as e:
             main_logger.exception('BotFail')
-            exception_log(
-                'BotFail: ', e
-                )
             logging.error(f'{Exception}: {e}', exc_info=True)
             sleep(60)
 
