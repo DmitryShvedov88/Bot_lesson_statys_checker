@@ -1,12 +1,14 @@
 import logging
 import os
-from time import sleep
 import asyncio
 import aiohttp
 import requests
 from dotenv import load_dotenv, find_dotenv
 from bot import send_message
 from tg_logging import main_logger
+
+
+RETRY_DELAY = 60
 
 
 async def take_lesson_review(
@@ -31,6 +33,27 @@ async def take_lesson_review(
             return response
 
 
+async def process_lesson_data(
+    tg_token: str,
+    chat_id: str,
+    lesson_review_data: dict,
+    params: dict
+) -> None:
+    """Process lesson review data and send notification if needed.
+    params:
+        tg_token: TG Token
+        chat_id: TG Chat ID
+        lesson_review_data: lesson review dict
+        params: dict timestampt
+    return:
+        json
+    """
+    main_logger.info("Программа запрашивает ревью урока")
+    if "last_attempt_timestamp" in lesson_review_data:
+        params["timestamp"] = lesson_review_data["last_attempt_timestamp"]
+        await send_message(tg_token, chat_id, lesson_review_data)
+
+
 async def main() -> None:
     main_logger.info("Программа стартует")
     load_dotenv(find_dotenv())
@@ -41,24 +64,26 @@ async def main() -> None:
     url_long = 'https://dvmn.org/api/long_polling/'
     headers = {"Authorization": f'Token {dvmn_token}'}
     main_logger.info("Программа готова")
+    params = {"timestamp": str()}
     while True:
-        params = {"timestamp": str()}
         try:
             lesson_review_data = await take_lesson_review(
                 url_long,
                 headers,
                 params
                 )
-            params["timestamp"] = lesson_review_data["last_attempt_timestamp"]
-            await send_message(tg_token, chat_id, lesson_review_data)
+            await process_lesson_data(tg_token, chat_id, lesson_review_data, params)
         except requests.exceptions.ConnectionError as e:
             main_logger.warning('ConnectionError occurred')
             logging.error(f'{requests.exceptions.ConnectionError}: {e}', exc_info=True)
-            sleep(60)
+            await asyncio.sleep(RETRY_DELAY)
+        except KeyError as e:
+            main_logger.exception(f"Неожиданная структура ответа: {str(e)}")
+            await asyncio.sleep(RETRY_DELAY)
         except Exception as e:
             main_logger.exception('BotFail')
             logging.error(f'{Exception}: {e}', exc_info=True)
-            sleep(60)
+            await asyncio.sleep(RETRY_DELAY)
 
 
 if __name__ == "__main__":
