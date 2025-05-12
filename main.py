@@ -5,7 +5,7 @@ import aiohttp
 import requests
 from dotenv import load_dotenv, find_dotenv
 from bot import send_message
-from tg_logging import main_logger
+from tg_logging import main_logger, logging_exception_log
 
 
 RETRY_DELAY = 60
@@ -74,14 +74,14 @@ async def main() -> None:
                 )
             await process_lesson_data(tg_token, chat_id, lesson_review_data, params)
         except requests.exceptions.ConnectionError as e:
-            main_logger.warning('ConnectionError occurred')
+            logging_exception_log('ConnectionError occurred', e)
             logging.error(f'{requests.exceptions.ConnectionError}: {e}', exc_info=True)
             await asyncio.sleep(RETRY_DELAY)
         except KeyError as e:
-            main_logger.exception(f"Неожиданная структура ответа: {str(e)}")
+            logging_exception_log('KeyError',  e)
             await asyncio.sleep(RETRY_DELAY)
         except Exception as e:
-            main_logger.exception('BotFail')
+            logging_exception_log('BotFail',  e)
             logging.error(f'{Exception}: {e}', exc_info=True)
             await asyncio.sleep(RETRY_DELAY)
 

@@ -36,6 +36,5 @@ def run_error_log(bot_logger_token, chat_id):
     return logger
 
 
-def exception_log(text, exception):
+def logging_exception_log(text, exception):
     logging.error(f'{text}: {exception}', exc_info=True)
-    sleep(4)
