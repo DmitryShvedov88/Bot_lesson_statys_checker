@@ -27,7 +27,7 @@ class TGLogsHandler(logging.Handler):
 def send_log_tg(bot_logger_token, chat_id):
     bot = telegram.Bot(token=bot_logger_token)
     logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.ERROR)
     telegram_handler = TGLogsHandler(bot, chat_id)
     formatter = logging.Formatter(FORMAT)
     telegram_handler.setFormatter(formatter)
@@ -36,4 +36,6 @@ def send_log_tg(bot_logger_token, chat_id):
 
 
 def logging_exception_log(text, exception):
+    logger = logging.getLogger()
+    logger.setLevel(logging.ERROR)
     logging.error(f'{text}: {exception}', exc_info=True)

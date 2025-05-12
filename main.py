@@ -67,7 +67,6 @@ async def main() -> None:
     params = {"timestamp": str()}
     while True:
         try:
-            x=1/0
             lesson_review_data = await take_lesson_review(
                 url_long,
                 headers,
