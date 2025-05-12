@@ -1,7 +1,7 @@
 import telegram
 
 
-async def prepare_message(lesson_review_data: dict) -> str:
+def prepare_message(lesson_review_data: dict) -> str:
     '''Prepare result dict for send by telegram bot
     params:
         lesson_review_data: dict with data
@@ -32,6 +32,6 @@ async def send_message(
         chat_id: telegram cat id
         lesson_review: dict with result
     '''
-    message = await prepare_message(lesson_review_data)
+    message = prepare_message(lesson_review_data)
     bot = telegram.Bot(token=tg_token)
     await bot.send_message(text=message, chat_id=chat_id)
