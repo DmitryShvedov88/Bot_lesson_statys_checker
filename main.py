@@ -5,7 +5,7 @@ import aiohttp
 import requests
 from dotenv import load_dotenv, find_dotenv
 from bot import send_message
-from tg_logging import main_logger, logging_exception_log
+from tg_logging import main_logger, logging_exception_log, send_log_tg
 
 
 RETRY_DELAY = 60
@@ -67,6 +67,7 @@ async def main() -> None:
     params = {"timestamp": str()}
     while True:
         try:
+            x=1/0
             lesson_review_data = await take_lesson_review(
                 url_long,
                 headers,
@@ -74,15 +75,16 @@ async def main() -> None:
                 )
             await process_lesson_data(tg_token, chat_id, lesson_review_data, params)
         except requests.exceptions.ConnectionError as e:
-            logging_exception_log('ConnectionError occurred', e)
-            logging.error(f'{requests.exceptions.ConnectionError}: {e}', exc_info=True)
+            #send_log_tg(bot_logger_token, chat_id)
+            logging_exception_log(requests.exceptions.ConnectionError,  e)
             await asyncio.sleep(RETRY_DELAY)
         except KeyError as e:
-            logging_exception_log('KeyError',  e)
+            #send_log_tg(bot_logger_token, chat_id)
+            logging_exception_log(KeyError,  e)
             await asyncio.sleep(RETRY_DELAY)
         except Exception as e:
-            logging_exception_log('BotFail',  e)
-            logging.error(f'{Exception}: {e}', exc_info=True)
+            #send_log_tg(bot_logger_token, chat_id)
+            logging_exception_log(Exception,  e)
             await asyncio.sleep(RETRY_DELAY)
 
 

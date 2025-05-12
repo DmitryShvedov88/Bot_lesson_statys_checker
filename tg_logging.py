@@ -1,7 +1,6 @@
 import logging
 import asyncio
 import telegram
-from time import sleep
 
 
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -25,7 +24,7 @@ class TGLogsHandler(logging.Handler):
         await self.bot.send_message(chat_id=self.chat_id, text=message)
 
 
-def run_error_log(bot_logger_token, chat_id):
+def send_log_tg(bot_logger_token, chat_id):
     bot = telegram.Bot(token=bot_logger_token)
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
