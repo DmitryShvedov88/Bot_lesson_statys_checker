@@ -6,8 +6,8 @@ import telegram
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 logging.basicConfig(format=FORMAT)
-main_logger = logging.getLogger('Logger')
-main_logger.setLevel(logging.INFO)
+logger = logging.getLogger('Logger')
+logger.setLevel(logging.INFO)
 
 
 class TGLogsHandler(logging.Handler):
@@ -24,10 +24,8 @@ class TGLogsHandler(logging.Handler):
         await self.bot.send_message(chat_id=self.chat_id, text=message)
 
 
-def send_log_tg(bot_logger_token, chat_id):
+def send_log_tg(bot_logger_token, chat_id, logger):
     bot = telegram.Bot(token=bot_logger_token)
-    logger = logging.getLogger()
-    logger.setLevel(logging.ERROR)
     telegram_handler = TGLogsHandler(bot, chat_id)
     formatter = logging.Formatter(FORMAT)
     telegram_handler.setFormatter(formatter)
@@ -36,6 +34,5 @@ def send_log_tg(bot_logger_token, chat_id):
 
 
 def logging_exception_log(text, exception):
-    logger = logging.getLogger()
     logger.setLevel(logging.ERROR)
     logging.error(f'{text}: {exception}', exc_info=True)

@@ -5,7 +5,7 @@ import aiohttp
 import requests
 from dotenv import load_dotenv, find_dotenv
 from bot import send_message
-from tg_logging import main_logger, logging_exception_log, send_log_tg
+from tg_logging import logger, logging_exception_log, send_log_tg
 
 
 RETRY_DELAY = 60
@@ -48,14 +48,14 @@ async def process_lesson_data(
     return:
         json
     """
-    main_logger.info("Программа запрашивает ревью урока")
+    logger.info("Программа запрашивает ревью урока")
     if "last_attempt_timestamp" in lesson_review_data:
         params["timestamp"] = lesson_review_data["last_attempt_timestamp"]
         await send_message(tg_token, chat_id, lesson_review_data)
 
 
 async def main() -> None:
-    main_logger.info("Программа стартует")
+    logger.info("Программа стартует")
     load_dotenv(find_dotenv())
     tg_token = os.environ["TG_TOKEN"]
     bot_logger_token = os.environ["TG_BOT_LOGGER_TOKEN"]
@@ -63,7 +63,7 @@ async def main() -> None:
     dvmn_token = os.environ["DVMN_TOKEN"]
     url_long = 'https://dvmn.org/api/long_polling/'
     headers = {"Authorization": f'Token {dvmn_token}'}
-    main_logger.info("Программа готова")
+    logger.info("Программа готова")
     params = {"timestamp": str()}
     while True:
         try:
@@ -74,15 +74,15 @@ async def main() -> None:
                 )
             await process_lesson_data(tg_token, chat_id, lesson_review_data, params)
         except requests.exceptions.ConnectionError as e:
-            #send_log_tg(bot_logger_token, chat_id)
+            send_log_tg(bot_logger_token, chat_id)
             logging_exception_log(requests.exceptions.ConnectionError,  e)
             await asyncio.sleep(RETRY_DELAY)
         except KeyError as e:
-            #send_log_tg(bot_logger_token, chat_id)
+            send_log_tg(bot_logger_token, chat_id)
             logging_exception_log(KeyError,  e)
             await asyncio.sleep(RETRY_DELAY)
         except Exception as e:
-            #send_log_tg(bot_logger_token, chat_id)
+            send_log_tg(bot_logger_token, chat_id)
             logging_exception_log(Exception,  e)
             await asyncio.sleep(RETRY_DELAY)
 
