@@ -3,6 +3,7 @@ import asyncio
 import aiohttp
 import requests
 from dotenv import load_dotenv, find_dotenv
+import telegram
 from bot import send_message
 from tg_logging import logger, logging_exception_log
 
@@ -60,13 +61,17 @@ async def main() -> None:
     bot_logger_token = os.environ["TG_BOT_LOGGER_TOKEN"]
     chat_id = os.environ["CHAT_ID"]
     dvmn_token = os.environ["DVMN_TOKEN"]
+    
+    bot = telegram.Bot(token=bot_logger_token)
+    logger.addHandler(TelegramLogsHandler(bot, chat_id))
+    logger.info("Бот запущен и ожидает проверок...")
     url_long = 'https://dvmn.org/api/long_polling/'
     headers = {"Authorization": f'Token {dvmn_token}'}
     logger.info("Программа готова")
     params = {"timestamp": str()}
     while True:
         try:
-            х=1/0
+            # х=1/0
             lesson_review_data = await take_lesson_review(
                 url_long,
                 headers,
