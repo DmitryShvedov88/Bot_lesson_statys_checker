@@ -1,4 +1,3 @@
-import logging
 import os
 import asyncio
 import aiohttp
@@ -72,7 +71,12 @@ async def main() -> None:
                 headers,
                 params
                 )
-            await process_lesson_data(tg_token, chat_id, lesson_review_data, params)
+            await process_lesson_data(
+                tg_token,
+                chat_id,
+                lesson_review_data,
+                params
+            )
         except requests.exceptions.ConnectionError as e:
             send_log_tg(bot_logger_token, chat_id)
             logging_exception_log(requests.exceptions.ConnectionError,  e)
