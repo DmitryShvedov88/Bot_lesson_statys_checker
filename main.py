@@ -55,23 +55,24 @@ async def process_lesson_data(
 
 
 async def main() -> None:
-    logger.info("Программа стартует")
     load_dotenv(find_dotenv())
+    # load tokens, chat_ID
     tg_token = os.environ["TG_TOKEN"]
     bot_logger_token = os.environ["TG_BOT_LOGGER_TOKEN"]
-    chat_id = os.environ["CHAT_ID"]
     dvmn_token = os.environ["DVMN_TOKEN"]
+    chat_id = os.environ["CHAT_ID"]
+    logger_chat_id = os.environ["LOGGER_CHAT_ID"]
+    # start bot logging
     bot_logger = telegram.Bot(token=bot_logger_token)
-    telegram_handler = TGLogsHandler(bot_logger, chat_id)
+    telegram_handler = TGLogsHandler(bot_logger, logger_chat_id)
     logger.addHandler(telegram_handler)
-    logger.info("Бот запущен и ожидает проверок...")
+    # add params
     url_long = 'https://dvmn.org/api/long_polling/'
     headers = {"Authorization": f'Token {dvmn_token}'}
-    logger.info("Программа готова")
     params = {"timestamp": str()}
+    logger.info("Программа запустилась")
     while True:
         try:
-            # х=1/0
             lesson_review_data = await take_lesson_review(
                 url_long,
                 headers,
