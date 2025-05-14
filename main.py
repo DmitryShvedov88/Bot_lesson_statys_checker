@@ -49,7 +49,6 @@ async def process_lesson_data(
     return:
         json
     """
-    logger.info("Программа запрашивает ревью урока")
     if "last_attempt_timestamp" in lesson_review_data:
         params["timestamp"] = lesson_review_data["last_attempt_timestamp"]
         await send_message(tg_token, chat_id, lesson_review_data)
