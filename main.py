@@ -73,6 +73,7 @@ async def main() -> None:
     logger.info("Программа запустилась")
     while True:
         try:
+            x=1/0
             lesson_review_data = await take_lesson_review(
                 url_long,
                 headers,
@@ -85,30 +86,13 @@ async def main() -> None:
                 params
             )
         except requests.exceptions.ConnectionError as e:
-            logger.info(
-                requests.exceptions.ConnectionError,
-                e,
-                bot_logger_token,
-                chat_id, logger
-            )
+            logger.error(e)
             await asyncio.sleep(RETRY_DELAY)
         except KeyError as e:
-            logger.info(
-                KeyError,
-                e,
-                bot_logger_token,
-                chat_id,
-                logger
-            )
+            logger.error(e)
             await asyncio.sleep(RETRY_DELAY)
         except Exception as e:
-            logger.info(
-                Exception,
-                e,
-                bot_logger_token,
-                chat_id,
-                logger
-            )
+            logger.error(e)
             await asyncio.sleep(RETRY_DELAY)
 
 
