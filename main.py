@@ -1,3 +1,4 @@
+from logging import Logger
 import os
 import asyncio
 import aiohttp
@@ -5,7 +6,7 @@ import requests
 from dotenv import load_dotenv, find_dotenv
 import telegram
 from bot import send_message
-from tg_logging import logger, TGLogsHandler
+from tg_logging import initializer_logger, TGLogsHandler
 
 
 RETRY_DELAY = 60
@@ -34,6 +35,7 @@ async def take_lesson_review(
 
 
 async def process_lesson_data(
+    logger: Logger,
     tg_token: str,
     chat_id: str,
     lesson_review_data: dict,
@@ -63,6 +65,7 @@ async def main() -> None:
     chat_id = os.environ["CHAT_ID"]
     logger_chat_id = os.environ["LOGGER_CHAT_ID"]
     # start bot logging
+    logger = await initializer_logger()
     bot_logger = telegram.Bot(token=bot_logger_token)
     telegram_handler = TGLogsHandler(bot_logger, logger_chat_id)
     logger.addHandler(telegram_handler)
@@ -79,6 +82,7 @@ async def main() -> None:
                 params
                 )
             await process_lesson_data(
+                logger,
                 tg_token,
                 chat_id,
                 lesson_review_data,

@@ -4,9 +4,12 @@ import asyncio
 
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
-logging.basicConfig(format=FORMAT)
-logger = logging.getLogger('Logger')
-logger.setLevel(logging.INFO)
+
+async def initializer_logger():
+    logging.basicConfig(format=FORMAT)
+    logger = logging.getLogger('Logger')
+    logger.setLevel(logging.INFO)
+    return logger
 
 
 class TGLogsHandler(logging.Handler):
