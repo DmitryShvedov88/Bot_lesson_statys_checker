@@ -5,7 +5,7 @@ import requests
 from dotenv import load_dotenv, find_dotenv
 import telegram
 from bot import send_message
-from tg_logging import logger, logging_exception_log
+from tg_logging import logger, TGLogsHandler
 
 
 RETRY_DELAY = 60
@@ -61,9 +61,9 @@ async def main() -> None:
     bot_logger_token = os.environ["TG_BOT_LOGGER_TOKEN"]
     chat_id = os.environ["CHAT_ID"]
     dvmn_token = os.environ["DVMN_TOKEN"]
-    
-    bot = telegram.Bot(token=bot_logger_token)
-    logger.addHandler(TelegramLogsHandler(bot, chat_id))
+    bot_logger = telegram.Bot(token=bot_logger_token)
+    telegram_handler = TGLogsHandler(bot_logger, chat_id)
+    logger.addHandler(telegram_handler)
     logger.info("Бот запущен и ожидает проверок...")
     url_long = 'https://dvmn.org/api/long_polling/'
     headers = {"Authorization": f'Token {dvmn_token}'}
@@ -84,7 +84,7 @@ async def main() -> None:
                 params
             )
         except requests.exceptions.ConnectionError as e:
-            logging_exception_log(
+            logger.info(
                 requests.exceptions.ConnectionError,
                 e,
                 bot_logger_token,
@@ -92,7 +92,7 @@ async def main() -> None:
             )
             await asyncio.sleep(RETRY_DELAY)
         except KeyError as e:
-            logging_exception_log(
+            logger.info(
                 KeyError,
                 e,
                 bot_logger_token,
@@ -101,7 +101,7 @@ async def main() -> None:
             )
             await asyncio.sleep(RETRY_DELAY)
         except Exception as e:
-            logging_exception_log(
+            logger.info(
                 Exception,
                 e,
                 bot_logger_token,
