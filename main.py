@@ -35,7 +35,6 @@ async def take_lesson_review(
 
 
 async def process_lesson_data(
-    logger: Logger,
     tg_token: str,
     chat_id: str,
     lesson_review_data: dict,
@@ -82,7 +81,6 @@ async def main() -> None:
                 params
                 )
             await process_lesson_data(
-                logger,
                 tg_token,
                 chat_id,
                 lesson_review_data,
