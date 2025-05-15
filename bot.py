@@ -9,8 +9,8 @@ def prepare_message(lesson_review_data: dict) -> str:
         text massage for telegram bot
     '''
     result_review = (
-        "К сожалению в работе нашлись ошибки",
-        "Преподавателю понравилось, можно приступать к следующему уроку"
+        "Преподавателю понравилось, можно приступать к следующему уроку",
+        "К сожалению в работе нашлись ошибки"
     )[lesson_review_data["new_attempts"][0]["is_negative"]]
     massage = (
         f'У Вас проверили работу!\n\n'
